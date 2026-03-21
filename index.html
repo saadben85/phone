@@ -11,8 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ذاكرة الأرقام">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Share+Tech+Mono:wght@400&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --bg: #080d1a;
@@ -32,7 +31,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -95,7 +94,7 @@ body {
   border: 2px solid var(--border);
   border-radius: 12px;
   color: var(--text);
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   padding: 13px 8px;
@@ -131,7 +130,7 @@ body {
   border: 2px solid var(--border);
   border-radius: 10px;
   color: var(--text);
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   padding: 10px 12px;
@@ -158,7 +157,7 @@ body {
   border-radius: 16px;
   background: linear-gradient(130deg, var(--accent) 0%, var(--accent2) 100%);
   color: #fff;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1.1rem;
   font-weight: 900;
   cursor: pointer;
@@ -240,7 +239,7 @@ body {
   margin-bottom: 10px;
 }
 .phone-number {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 2.4rem;
   text-align: center;
   letter-spacing: 6px;
@@ -266,7 +265,7 @@ body {
 .ring-bg { fill: none; stroke: var(--border); stroke-width: 5; }
 .ring-fill { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.9s linear, stroke 0.3s; transform: rotate(-90deg); transform-origin: 50% 50%; }
 .ring-txt {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 1.15rem;
   fill: var(--text);
   text-anchor: middle;
@@ -295,7 +294,7 @@ body {
   border: 2px solid var(--border);
   border-radius: 12px;
   color: var(--text);
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 1.6rem;
   padding: 14px 14px;
   text-align: center;
@@ -332,7 +331,7 @@ body {
   border-radius: 13px;
   background: linear-gradient(130deg, var(--accent2), #9333ea);
   color: #fff;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -367,7 +366,7 @@ body {
 }
 .result-banner .icon { font-size: 1.4rem; flex-shrink: 0; }
 .result-correct-num {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   letter-spacing: 3px;
   display: block;
   margin-top: 4px;
@@ -383,7 +382,7 @@ body {
   border-radius: 13px;
   background: transparent;
   color: var(--accent);
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -413,7 +412,7 @@ body {
 .final-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 6px; }
 .final-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 22px; }
 .final-score {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 3.5rem;
   font-weight: 400;
   color: var(--accent);
@@ -444,7 +443,7 @@ body {
   border-radius: 16px;
   background: linear-gradient(130deg, var(--accent), var(--accent2));
   color: #fff;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   font-size: 1.05rem;
   font-weight: 900;
   cursor: pointer;
@@ -702,198 +701,4 @@ function startGame() {
   wrongCount   = 0;
 
   document.getElementById('setupArea').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'block';
-  document.getElementById('statsRow').style.display = 'flex';
-  document.getElementById('gameArea').style.display = 'flex';
-  document.getElementById('finalScreen').style.display = 'none';
-
-  updateStats();
-  nextRound();
-}
-
-function nextRound() {
-  if (currentRound >= totalRounds) { showFinal(); return; }
-
-  currentRound++;
-  answered = false;
-  currentNum = genPhoneNumber();
-
-  // Reset UI
-  hideResult();
-  document.getElementById('nextBtn').style.display = 'none';
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').style.display = 'block';
-  document.getElementById('answerInp').value = '';
-  document.getElementById('answerInp').disabled = true;
-  document.getElementById('phoneNum').textContent = formatPhone(currentNum);
-  document.getElementById('phoneNum').classList.remove('hidden-num');
-  document.getElementById('phaseLbl').textContent = 'احفظ الرقم';
-  document.getElementById('cdLabel').textContent = 'ثانية للحفظ';
-  document.getElementById('inputArea').style.opacity = '0.4';
-
-  updateStats();
-  updateProgress();
-
-  // Display countdown
-  let left = displaySec;
-  setRing(left, displaySec, 'display');
-  clearInterval(displayTimer);
-  displayTimer = setInterval(() => {
-    left--;
-    if (left <= 0) {
-      clearInterval(displayTimer);
-      hideNumber();
-    } else {
-      setRing(left, displaySec, 'display');
-    }
-  }, 1000);
-}
-
-function hideNumber() {
-  document.getElementById('phoneNum').classList.add('hidden-num');
-  document.getElementById('phaseLbl').textContent = 'اكتب الرقم';
-  document.getElementById('cdLabel').textContent = 'ثانية للكتابة';
-  document.getElementById('answerInp').disabled = false;
-  document.getElementById('answerInp').focus();
-  document.getElementById('inputArea').style.opacity = '1';
-
-  // Recall countdown
-  recallLeft = RECALL_SEC;
-  setRing(recallLeft, RECALL_SEC, 'recall');
-  setRecallBar(recallLeft);
-  clearInterval(recallTimer);
-  recallTimer = setInterval(() => {
-    recallLeft--;
-    setRing(recallLeft, RECALL_SEC, 'recall');
-    setRecallBar(recallLeft);
-    if (recallLeft <= 0) {
-      clearInterval(recallTimer);
-      if (!answered) autoFail();
-    }
-  }, 1000);
-}
-
-function onAnswerInput() {
-  const v = document.getElementById('answerInp').value.replace(/\D/g,'');
-  document.getElementById('answerInp').value = v;
-  document.getElementById('submitBtn').disabled = v.length === 0;
-}
-
-function submitAnswer() {
-  if (answered) return;
-  clearInterval(recallTimer);
-  answered = true;
-
-  const userAns = document.getElementById('answerInp').value.replace(/\D/g,'');
-  const correct = userAns === currentNum;
-
-  if (correct) correctCount++;
-  else         wrongCount++;
-
-  showResult(correct, false);
-  updateStats();
-}
-
-function autoFail() {
-  if (answered) return;
-  answered = true;
-  wrongCount++;
-  document.getElementById('answerInp').disabled = true;
-  showResult(false, true);
-  updateStats();
-}
-
-function showResult(correct, timeout) {
-  const banner = document.getElementById('resultBanner');
-  banner.style.display = 'flex';
-  banner.className = 'result-banner ' + (correct ? 'correct' : 'wrong');
-  document.getElementById('resultIcon').textContent = correct ? '✅' : '❌';
-
-  let msg = '';
-  if (timeout)       msg = 'انتهى الوقت! الرقم الصحيح كان:';
-  else if (correct)  msg = 'ممتاز! الرقم صحيح تماماً 🎉';
-  else               msg = 'خطأ! الرقم الصحيح كان:';
-
-  document.getElementById('resultText').textContent = msg;
-  document.getElementById('resultNum').textContent = correct ? '' : formatPhone(currentNum);
-
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').style.display = 'none';
-  document.getElementById('answerInp').disabled = true;
-
-  const isLast = currentRound >= totalRounds;
-  const nextBtn = document.getElementById('nextBtn');
-  nextBtn.style.display = 'block';
-  nextBtn.textContent = isLast ? '📊 عرض النتيجة النهائية' : 'الجولة التالية ←';
-}
-
-function hideResult() {
-  document.getElementById('resultBanner').style.display = 'none';
-}
-
-// ============================================================
-//  STATS & PROGRESS
-// ============================================================
-function updateStats() {
-  document.getElementById('sRound').textContent   = currentRound + ' / ' + totalRounds;
-  document.getElementById('sCorrect').textContent = correctCount;
-  document.getElementById('sWrong').textContent   = wrongCount;
-}
-
-function updateProgress() {
-  const pct = ((currentRound - 1) / totalRounds) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-}
-
-// ============================================================
-//  FINAL SCREEN
-// ============================================================
-function showFinal() {
-  document.getElementById('gameArea').style.display = 'none';
-  document.getElementById('progressFill').style.width = '100%';
-
-  const pct = Math.round((correctCount / totalRounds) * 100);
-  let icon = '🏆', title = 'رائع جداً!';
-  if (pct >= 90)      { icon = '🏆'; title = 'رائع جداً! أداء استثنائي!'; }
-  else if (pct >= 70) { icon = '🎯'; title = 'جيد جداً! استمر!'; }
-  else if (pct >= 50) { icon = '💪'; title = 'مقبول، تحتاج مزيداً من التدريب!'; }
-  else                { icon = '🧠'; title = 'تحتاج تدريباً أكثر!'; }
-
-  document.getElementById('finalIcon').textContent  = icon;
-  document.getElementById('finalTitle').textContent = title;
-  document.getElementById('finalScore').textContent = pct + '%';
-  document.getElementById('fCorrect').textContent   = correctCount;
-  document.getElementById('fWrong').textContent     = wrongCount;
-
-  document.getElementById('finalScreen').style.display = 'flex';
-}
-
-function restartGame() {
-  clearInterval(displayTimer);
-  clearInterval(recallTimer);
-  document.getElementById('finalScreen').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'none';
-  document.getElementById('statsRow').style.display = 'none';
-  document.getElementById('gameArea').style.display = 'none';
-  document.getElementById('setupArea').style.display = 'block';
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('customRnd').value = '';
-  document.getElementById('customRnd').classList.remove('active-custom');
-  selectDur(10);
-  selectRnd(10);
-}
-
-// Init ring
-setRing(10, 10, 'display');
-
-// Register Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(() => console.log('SW registered'))
-      .catch(e => console.log('SW error:', e));
-  });
-}
-</script>
-</body>
-</html>
+  document.getElementById('progressWrap').style.display = 
