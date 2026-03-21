@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تدريب الذاكرة - أرقام الهاتف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Share+Tech+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080d1a;
+  --surface: #0f172a;
+  --card: #141e33;
+  --card2: #1a2540;
+  --border: #1e2d4a;
+  --accent: #00e5ff;
+  --accent2: #7c3aed;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --text: #dde6f0;
+  --text-muted: #4a6080;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 14px 50px;
+  background-image:
+    radial-gradient(ellipse at 15% 10%, rgba(0,229,255,0.07) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 85%, rgba(124,58,237,0.07) 0%, transparent 45%);
+}
+
+/* ===== HEADER ===== */
+.header {
+  text-align: center;
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 460px;
+}
+.header h1 {
+  font-size: 1.55rem;
+  font-weight: 900;
+  background: linear-gradient(130deg, var(--accent) 0%, var(--accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 3px;
+}
+.header p { font-size: 0.78rem; color: var(--text-muted); }
+
+/* ===== CARD ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 18px;
+  width: 100%;
+  max-width: 460px;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* ===== OPTION BUTTONS ===== */
+.options-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.opt-btn {
+  flex: 1;
+  min-width: 70px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 13px 8px;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+}
+.opt-btn:hover { border-color: var(--accent); color: var(--accent); }
+.opt-btn.sel {
+  background: rgba(0,229,255,0.09);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 18px rgba(0,229,255,0.13);
+}
+.opt-btn.sel2 {
+  background: rgba(124,58,237,0.09);
+  border-color: var(--accent2);
+  color: #a78bfa;
+  box-shadow: 0 0 18px rgba(124,58,237,0.13);
+}
+
+/* custom rounds input */
+.custom-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.custom-lbl { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.custom-inp {
+  flex: 1;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 12px;
+  text-align: center;
+  transition: border-color 0.18s;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.custom-inp::-webkit-outer-spin-button,
+.custom-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.custom-inp:focus { border-color: var(--accent2); }
+.custom-inp.active-custom {
+  border-color: var(--accent2);
+  background: rgba(124,58,237,0.07);
+  color: #a78bfa;
+}
+
+/* ===== START BUTTON ===== */
+.start-btn {
+  width: 100%;
+  max-width: 460px;
+  padding: 17px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(130deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+.start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.start-btn:active { transform: translateY(0); }
+.start-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-wrap {
+  width: 100%;
+  max-width: 460px;
+  height: 5px;
+  background: var(--border);
+  border-radius: 99px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  display: none;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* ===== STATS ROW ===== */
+.stats-row {
+  width: 100%;
+  max-width: 460px;
+  display: none;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.stat-box {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 8px;
+  text-align: center;
+}
+.stat-val { font-size: 1.3rem; font-weight: 900; }
+.stat-lbl { font-size: 0.68rem; color: var(--text-muted); margin-top: 1px; }
+.stat-box.sc .stat-val { color: var(--success); }
+.stat-box.wr .stat-val { color: var(--danger); }
+.stat-box.rd .stat-val { color: var(--accent); }
+
+/* ===== GAME AREA ===== */
+#gameArea { display: none; width: 100%; max-width: 460px; flex-direction: column; align-items: center; }
+
+/* ---- PHONE DISPLAY ---- */
+.phone-frame {
+  background: #0b1120;
+  border: 2px solid #1e2d4a;
+  border-radius: 22px;
+  padding: 28px 24px 22px;
+  width: 100%;
+  margin-bottom: 14px;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.phone-notch {
+  width: 80px;
+  height: 6px;
+  background: #1e2d4a;
+  border-radius: 99px;
+  margin: 0 auto 22px;
+}
+.phone-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.phone-number {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2.4rem;
+  text-align: center;
+  letter-spacing: 6px;
+  color: var(--accent);
+  text-shadow: 0 0 24px rgba(0,229,255,0.45);
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+  direction: ltr;
+}
+.phone-number.hidden-num { opacity: 0; }
+
+/* countdown ring */
+.countdown-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14px;
+}
+.ring-svg { width: 64px; height: 64px; }
+.ring-bg { fill: none; stroke: var(--border); stroke-width: 5; }
+.ring-fill { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.9s linear, stroke 0.3s; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.ring-txt {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.15rem;
+  fill: var(--text);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.cd-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; }
+
+/* ---- INPUT AREA ---- */
+.input-area {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 18px;
+  margin-bottom: 14px;
+}
+.input-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: block;
+}
+.answer-inp {
+  width: 100%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.6rem;
+  padding: 14px 14px;
+  text-align: center;
+  outline: none;
+  letter-spacing: 4px;
+  direction: ltr;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+.answer-inp::-webkit-outer-spin-button,
+.answer-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.answer-inp:focus { border-color: var(--accent2); }
+.answer-inp:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* recall timer bar */
+.recall-timer-wrap {
+  margin-top: 12px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.recall-timer-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.95s linear, background 0.3s;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 15px;
+  border: none;
+  border-radius: 13px;
+  background: linear-gradient(130deg, var(--accent2), #9333ea);
+  color: #fff;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.submit-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+/* ---- RESULT BANNER ---- */
+.result-banner {
+  width: 100%;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.result-banner.correct {
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.35);
+  color: #6ee7b7;
+}
+.result-banner.wrong {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.35);
+  color: #fca5a5;
+}
+.result-banner .icon { font-size: 1.4rem; flex-shrink: 0; }
+.result-correct-num {
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 3px;
+  display: block;
+  margin-top: 4px;
+  font-size: 1.1rem;
+  color: #fff;
+  direction: ltr;
+}
+
+.next-btn {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid var(--accent);
+  border-radius: 13px;
+  background: transparent;
+  color: var(--accent);
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  display: none;
+}
+.next-btn:hover { background: rgba(0,229,255,0.08); }
+
+/* ===== FINAL RESULTS ===== */
+#finalScreen {
+  display: none;
+  width: 100%;
+  max-width: 460px;
+  flex-direction: column;
+  align-items: center;
+}
+.final-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 30px 22px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.final-icon { font-size: 3.5rem; margin-bottom: 10px; }
+.final-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 6px; }
+.final-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 22px; }
+.final-score {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(0,229,255,0.4);
+  margin-bottom: 6px;
+}
+.final-score-lbl { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; }
+.final-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.final-stat {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 14px 8px;
+}
+.final-stat .v { font-size: 1.5rem; font-weight: 900; }
+.final-stat .l { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+.final-stat.sc .v { color: var(--success); }
+.final-stat.wr .v { color: var(--danger); }
+
+.restart-btn {
+  width: 100%;
+  padding: 17px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(130deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.restart-btn:hover { opacity: 0.88; }
+
+/* ===== PHASE LABEL ===== */
+.phase-lbl {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* hide/show helpers */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📱 تدريب الذاكرة</h1>
+  <p>احفظ رقم الهاتف واكتبه من ذاكرتك</p>
+</div>
+
+<!-- ===== SETUP ===== -->
+<div id="setupArea">
+
+  <!-- Display Duration -->
+  <div class="card">
+    <div class="section-title">⏱ مدة عرض الرقم</div>
+    <div class="options-row" id="durBtns">
+      <button class="opt-btn" data-dur="1" onclick="selectDur(1)">1 ث</button>
+      <button class="opt-btn" data-dur="5" onclick="selectDur(5)">5 ث</button>
+      <button class="opt-btn sel" data-dur="10" onclick="selectDur(10)">10 ث</button>
+    </div>
+  </div>
+
+  <!-- Rounds -->
+  <div class="card">
+    <div class="section-title">🔢 عدد الجولات</div>
+    <div class="options-row" id="rndBtns">
+      <button class="opt-btn sel" data-rnd="10" onclick="selectRnd(10)">10</button>
+      <button class="opt-btn" data-rnd="20" onclick="selectRnd(20)">20</button>
+    </div>
+    <div class="custom-row">
+      <span class="custom-lbl">عدد مخصص:</span>
+      <input class="custom-inp" id="customRnd" type="number" min="1" max="100" placeholder="مثال: 15"
+        oninput="onCustomRnd()" onkeydown="if(event.key==='Enter')startGame()">
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn" onclick="startGame()">▶ ابدأ التدريب</button>
+</div>
+
+<!-- ===== PROGRESS & STATS ===== -->
+<div class="progress-bar-wrap" id="progressWrap">
+  <div class="progress-bar-fill" id="progressFill"></div>
+</div>
+<div class="stats-row" id="statsRow">
+  <div class="stat-box rd">
+    <div class="stat-val" id="sRound">0</div>
+    <div class="stat-lbl">الجولة</div>
+  </div>
+  <div class="stat-box sc">
+    <div class="stat-val" id="sCorrect">0</div>
+    <div class="stat-lbl">صحيح ✓</div>
+  </div>
+  <div class="stat-box wr">
+    <div class="stat-val" id="sWrong">0</div>
+    <div class="stat-lbl">خطأ ✗</div>
+  </div>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="gameArea">
+
+  <!-- Phone frame -->
+  <div class="phone-frame">
+    <div class="phone-notch"></div>
+    <p class="phase-lbl" id="phaseLbl">احفظ الرقم</p>
+    <div class="phone-label">INCOMING CALL</div>
+    <div class="phone-number" id="phoneNum">---</div>
+    <div class="countdown-wrap" id="cdWrap">
+      <svg class="ring-svg" viewBox="0 0 64 64">
+        <circle class="ring-bg" cx="32" cy="32" r="28"/>
+        <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="28"/>
+        <text class="ring-txt" id="ringTxt" x="32" y="32">-</text>
+      </svg>
+      <span class="cd-label" id="cdLabel">ثانية متبقية</span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area" id="inputArea">
+    <span class="input-label">اكتب الرقم الذي حفظته (لديك 15 ثانية)</span>
+    <input class="answer-inp" id="answerInp" type="tel" inputmode="numeric"
+      maxlength="10" placeholder="__________" disabled
+      oninput="onAnswerInput()" onkeydown="if(event.key==='Enter')submitAnswer()">
+    <div class="recall-timer-wrap">
+      <div class="recall-timer-bar" id="recallBar" style="width:100%; background: var(--accent);"></div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-banner" id="resultBanner">
+    <span class="icon" id="resultIcon"></span>
+    <div>
+      <span id="resultText"></span>
+      <span class="result-correct-num" id="resultNum"></span>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>تحقق من الإجابة</button>
+  <button class="next-btn" id="nextBtn" onclick="nextRound()">الجولة التالية ←</button>
+</div>
+
+<!-- ===== FINAL ===== -->
+<div id="finalScreen">
+  <div class="final-card">
+    <div class="final-icon" id="finalIcon">🏆</div>
+    <div class="final-title" id="finalTitle">انتهى التدريب!</div>
+    <div class="final-sub" id="finalSub">إليك نتيجتك النهائية</div>
+    <div class="final-score" id="finalScore">0%</div>
+    <div class="final-score-lbl">نسبة الإجابات الصحيحة</div>
+    <div class="final-grid">
+      <div class="final-stat sc">
+        <div class="v" id="fCorrect">0</div>
+        <div class="l">إجابات صحيحة ✓</div>
+      </div>
+      <div class="final-stat wr">
+        <div class="v" id="fWrong">0</div>
+        <div class="l">إجابات خاطئة ✗</div>
+      </div>
+    </div>
+  </div>
+  <button class="restart-btn" onclick="restartGame()">🔄 جولة جديدة</button>
+</div>
+
+<script>
+// ============================================================
+//  CONFIG
+// ============================================================
+const PREFIXES   = ['067','069','066','055','054','077','078'];
+const RECALL_SEC = 15;   // fixed recall time
+const CIRC       = 2 * Math.PI * 28; // ring circumference
+
+// ============================================================
+//  STATE
+// ============================================================
+let displaySec   = 10;
+let totalRounds  = 10;
+let currentRound = 0;
+let correctCount = 0;
+let wrongCount   = 0;
+let currentNum   = '';
+let displayTimer = null;
+let recallTimer  = null;
+let recallLeft   = RECALL_SEC;
+let answered     = false;
+
+// ============================================================
+//  SETUP LOGIC
+// ============================================================
+function selectDur(sec) {
+  displaySec = sec;
+  document.querySelectorAll('#durBtns .opt-btn').forEach(b => {
+    b.classList.toggle('sel', +b.dataset.dur === sec);
+  });
+}
+
+function selectRnd(n) {
+  totalRounds = n;
+  document.querySelectorAll('#rndBtns .opt-btn').forEach(b => {
+    b.classList.toggle('sel', +b.dataset.rnd === n);
+  });
+  const inp = document.getElementById('customRnd');
+  inp.value = '';
+  inp.classList.remove('active-custom');
+}
+
+function onCustomRnd() {
+  const inp = document.getElementById('customRnd');
+  const v = parseInt(inp.value);
+  document.querySelectorAll('#rndBtns .opt-btn').forEach(b => b.classList.remove('sel'));
+  if (v && v > 0) {
+    totalRounds = v;
+    inp.classList.add('active-custom');
+  } else {
+    inp.classList.remove('active-custom');
+    totalRounds = 10;
+  }
+}
+
+// ============================================================
+//  PHONE NUMBER GENERATOR
+// ============================================================
+function genPhoneNumber() {
+  const prefix = PREFIXES[Math.floor(Math.random() * PREFIXES.length)];
+  let rest = '';
+  for (let i = 0; i < 7; i++) rest += Math.floor(Math.random() * 10);
+  return prefix + rest; // 10 digits total
+}
+
+// Format: 06 66 66 66 66  (pairs, LTR)
+function formatPhone(num) {
+  // 10 digits → split as 2+2+2+2+2
+  return num.slice(0,2) + ' ' + num.slice(2,4) + ' ' + num.slice(4,6) + ' ' + num.slice(6,8) + ' ' + num.slice(8,10);
+}
+
+// ============================================================
+//  RING COUNTDOWN HELPERS
+// ============================================================
+function setRing(remaining, total, phase) {
+  const fill = document.getElementById('ringFill');
+  const txt  = document.getElementById('ringTxt');
+  const fraction = remaining / total;
+  const offset = CIRC * (1 - fraction);
+  fill.style.strokeDasharray  = CIRC;
+  fill.style.strokeDashoffset = offset;
+
+  // Color transitions
+  if (phase === 'display') {
+    fill.style.stroke = remaining > total * 0.5 ? '#00e5ff' : '#f59e0b';
+  } else {
+    if (remaining > 10)      fill.style.stroke = '#00e5ff';
+    else if (remaining > 5)  fill.style.stroke = '#f59e0b';
+    else                     fill.style.stroke = '#ef4444';
+  }
+  txt.textContent = remaining;
+}
+
+function setRecallBar(remaining) {
+  const bar = document.getElementById('recallBar');
+  const pct = (remaining / RECALL_SEC) * 100;
+  bar.style.width = pct + '%';
+  if (remaining > 10)     bar.style.background = 'var(--accent)';
+  else if (remaining > 5) bar.style.background = 'var(--warning)';
+  else                    bar.style.background = 'var(--danger)';
+}
+
+// ============================================================
+//  GAME FLOW
+// ============================================================
+function startGame() {
+  const custom = parseInt(document.getElementById('customRnd').value);
+  if (custom && custom > 0) totalRounds = custom;
+
+  currentRound = 0;
+  correctCount = 0;
+  wrongCount   = 0;
+
+  document.getElementById('setupArea').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('statsRow').style.display = 'flex';
+  document.getElementById('gameArea').style.display = 'flex';
+  document.getElementById('finalScreen').style.display = 'none';
+
+  updateStats();
+  nextRound();
+}
+
+function nextRound() {
+  if (currentRound >= totalRounds) { showFinal(); return; }
+
+  currentRound++;
+  answered = false;
+  currentNum = genPhoneNumber();
+
+  // Reset UI
+  hideResult();
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.display = 'block';
+  document.getElementById('answerInp').value = '';
+  document.getElementById('answerInp').disabled = true;
+  document.getElementById('phoneNum').textContent = formatPhone(currentNum);
+  document.getElementById('phoneNum').classList.remove('hidden-num');
+  document.getElementById('phaseLbl').textContent = 'احفظ الرقم';
+  document.getElementById('cdLabel').textContent = 'ثانية للحفظ';
+  document.getElementById('inputArea').style.opacity = '0.4';
+
+  updateStats();
+  updateProgress();
+
+  // Display countdown
+  let left = displaySec;
+  setRing(left, displaySec, 'display');
+  clearInterval(displayTimer);
+  displayTimer = setInterval(() => {
+    left--;
+    if (left <= 0) {
+      clearInterval(displayTimer);
+      hideNumber();
+    } else {
+      setRing(left, displaySec, 'display');
+    }
+  }, 1000);
+}
+
+function hideNumber() {
+  document.getElementById('phoneNum').classList.add('hidden-num');
+  document.getElementById('phaseLbl').textContent = 'اكتب الرقم';
+  document.getElementById('cdLabel').textContent = 'ثانية للكتابة';
+  document.getElementById('answerInp').disabled = false;
+  document.getElementById('answerInp').focus();
+  document.getElementById('inputArea').style.opacity = '1';
+
+  // Recall countdown
+  recallLeft = RECALL_SEC;
+  setRing(recallLeft, RECALL_SEC, 'recall');
+  setRecallBar(recallLeft);
+  clearInterval(recallTimer);
+  recallTimer = setInterval(() => {
+    recallLeft--;
+    setRing(recallLeft, RECALL_SEC, 'recall');
+    setRecallBar(recallLeft);
+    if (recallLeft <= 0) {
+      clearInterval(recallTimer);
+      if (!answered) autoFail();
+    }
+  }, 1000);
+}
+
+function onAnswerInput() {
+  const v = document.getElementById('answerInp').value.replace(/\D/g,'');
+  document.getElementById('answerInp').value = v;
+  document.getElementById('submitBtn').disabled = v.length === 0;
+}
+
+function submitAnswer() {
+  if (answered) return;
+  clearInterval(recallTimer);
+  answered = true;
+
+  const userAns = document.getElementById('answerInp').value.replace(/\D/g,'');
+  const correct = userAns === currentNum;
+
+  if (correct) correctCount++;
+  else         wrongCount++;
+
+  showResult(correct, false);
+  updateStats();
+}
+
+function autoFail() {
+  if (answered) return;
+  answered = true;
+  wrongCount++;
+  document.getElementById('answerInp').disabled = true;
+  showResult(false, true);
+  updateStats();
+}
+
+function showResult(correct, timeout) {
+  const banner = document.getElementById('resultBanner');
+  banner.style.display = 'flex';
+  banner.className = 'result-banner ' + (correct ? 'correct' : 'wrong');
+  document.getElementById('resultIcon').textContent = correct ? '✅' : '❌';
+
+  let msg = '';
+  if (timeout)       msg = 'انتهى الوقت! الرقم الصحيح كان:';
+  else if (correct)  msg = 'ممتاز! الرقم صحيح تماماً 🎉';
+  else               msg = 'خطأ! الرقم الصحيح كان:';
+
+  document.getElementById('resultText').textContent = msg;
+  document.getElementById('resultNum').textContent = correct ? '' : formatPhone(currentNum);
+
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('answerInp').disabled = true;
+
+  const isLast = currentRound >= totalRounds;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = isLast ? '📊 عرض النتيجة النهائية' : 'الجولة التالية ←';
+}
+
+function hideResult() {
+  document.getElementById('resultBanner').style.display = 'none';
+}
+
+// ============================================================
+//  STATS & PROGRESS
+// ============================================================
+function updateStats() {
+  document.getElementById('sRound').textContent   = currentRound + ' / ' + totalRounds;
+  document.getElementById('sCorrect').textContent = correctCount;
+  document.getElementById('sWrong').textContent   = wrongCount;
+}
+
+function updateProgress() {
+  const pct = ((currentRound - 1) / totalRounds) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ============================================================
+//  FINAL SCREEN
+// ============================================================
+function showFinal() {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('progressFill').style.width = '100%';
+
+  const pct = Math.round((correctCount / totalRounds) * 100);
+  let icon = '🏆', title = 'رائع جداً!';
+  if (pct >= 90)      { icon = '🏆'; title = 'رائع جداً! أداء استثنائي!'; }
+  else if (pct >= 70) { icon = '🎯'; title = 'جيد جداً! استمر!'; }
+  else if (pct >= 50) { icon = '💪'; title = 'مقبول، تحتاج مزيداً من التدريب!'; }
+  else                { icon = '🧠'; title = 'تحتاج تدريباً أكثر!'; }
+
+  document.getElementById('finalIcon').textContent  = icon;
+  document.getElementById('finalTitle').textContent = title;
+  document.getElementById('finalScore').textContent = pct + '%';
+  document.getElementById('fCorrect').textContent   = correctCount;
+  document.getElementById('fWrong').textContent     = wrongCount;
+
+  document.getElementById('finalScreen').style.display = 'flex';
+}
+
+function restartGame() {
+  clearInterval(displayTimer);
+  clearInterval(recallTimer);
+  document.getElementById('finalScreen').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('statsRow').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('setupArea').style.display = 'block';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('customRnd').value = '';
+  document.getElementById('customRnd').classList.remove('active-custom');
+  selectDur(10);
+  selectRnd(10);
+}
+
+// Init ring
+setRing(10, 10, 'display');
+</script>
+</body>
+</html>
