@@ -701,4 +701,198 @@ function startGame() {
   wrongCount   = 0;
 
   document.getElementById('setupArea').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('statsRow').style.display = 'flex';
+  document.getElementById('gameArea').style.display = 'flex';
+  document.getElementById('finalScreen').style.display = 'none';
+
+  updateStats();
+  nextRound();
+}
+
+function nextRound() {
+  if (currentRound >= totalRounds) { showFinal(); return; }
+
+  currentRound++;
+  answered = false;
+  currentNum = genPhoneNumber();
+
+  // Reset UI
+  hideResult();
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.display = 'block';
+  document.getElementById('answerInp').value = '';
+  document.getElementById('answerInp').disabled = true;
+  document.getElementById('phoneNum').textContent = formatPhone(currentNum);
+  document.getElementById('phoneNum').classList.remove('hidden-num');
+  document.getElementById('phaseLbl').textContent = 'احفظ الرقم';
+  document.getElementById('cdLabel').textContent = 'ثانية للحفظ';
+  document.getElementById('inputArea').style.opacity = '0.4';
+
+  updateStats();
+  updateProgress();
+
+  // Display countdown
+  let left = displaySec;
+  setRing(left, displaySec, 'display');
+  clearInterval(displayTimer);
+  displayTimer = setInterval(() => {
+    left--;
+    if (left <= 0) {
+      clearInterval(displayTimer);
+      hideNumber();
+    } else {
+      setRing(left, displaySec, 'display');
+    }
+  }, 1000);
+}
+
+function hideNumber() {
+  document.getElementById('phoneNum').classList.add('hidden-num');
+  document.getElementById('phaseLbl').textContent = 'اكتب الرقم';
+  document.getElementById('cdLabel').textContent = 'ثانية للكتابة';
+  document.getElementById('answerInp').disabled = false;
+  document.getElementById('answerInp').focus();
+  document.getElementById('inputArea').style.opacity = '1';
+
+  // Recall countdown
+  recallLeft = RECALL_SEC;
+  setRing(recallLeft, RECALL_SEC, 'recall');
+  setRecallBar(recallLeft);
+  clearInterval(recallTimer);
+  recallTimer = setInterval(() => {
+    recallLeft--;
+    setRing(recallLeft, RECALL_SEC, 'recall');
+    setRecallBar(recallLeft);
+    if (recallLeft <= 0) {
+      clearInterval(recallTimer);
+      if (!answered) autoFail();
+    }
+  }, 1000);
+}
+
+function onAnswerInput() {
+  const v = document.getElementById('answerInp').value.replace(/\D/g,'');
+  document.getElementById('answerInp').value = v;
+  document.getElementById('submitBtn').disabled = v.length === 0;
+}
+
+function submitAnswer() {
+  if (answered) return;
+  clearInterval(recallTimer);
+  answered = true;
+
+  const userAns = document.getElementById('answerInp').value.replace(/\D/g,'');
+  const correct = userAns === currentNum;
+
+  if (correct) correctCount++;
+  else         wrongCount++;
+
+  showResult(correct, false);
+  updateStats();
+}
+
+function autoFail() {
+  if (answered) return;
+  answered = true;
+  wrongCount++;
+  document.getElementById('answerInp').disabled = true;
+  showResult(false, true);
+  updateStats();
+}
+
+function showResult(correct, timeout) {
+  const banner = document.getElementById('resultBanner');
+  banner.style.display = 'flex';
+  banner.className = 'result-banner ' + (correct ? 'correct' : 'wrong');
+  document.getElementById('resultIcon').textContent = correct ? '✅' : '❌';
+
+  let msg = '';
+  if (timeout)       msg = 'انتهى الوقت! الرقم الصحيح كان:';
+  else if (correct)  msg = 'ممتاز! الرقم صحيح تماماً 🎉';
+  else               msg = 'خطأ! الرقم الصحيح كان:';
+
+  document.getElementById('resultText').textContent = msg;
+  document.getElementById('resultNum').textContent = correct ? '' : formatPhone(currentNum);
+
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('answerInp').disabled = true;
+
+  const isLast = currentRound >= totalRounds;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = isLast ? '📊 عرض النتيجة النهائية' : 'الجولة التالية ←';
+}
+
+function hideResult() {
+  document.getElementById('resultBanner').style.display = 'none';
+}
+
+// ============================================================
+//  STATS & PROGRESS
+// ============================================================
+function updateStats() {
+  document.getElementById('sRound').textContent   = currentRound + ' / ' + totalRounds;
+  document.getElementById('sCorrect').textContent = correctCount;
+  document.getElementById('sWrong').textContent   = wrongCount;
+}
+
+function updateProgress() {
+  const pct = ((currentRound - 1) / totalRounds) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ============================================================
+//  FINAL SCREEN
+// ============================================================
+function showFinal() {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('progressFill').style.width = '100%';
+
+  const pct = Math.round((correctCount / totalRounds) * 100);
+  let icon = '🏆', title = 'رائع جداً!';
+  if (pct >= 90)      { icon = '🏆'; title = 'رائع جداً! أداء استثنائي!'; }
+  else if (pct >= 70) { icon = '🎯'; title = 'جيد جداً! استمر!'; }
+  else if (pct >= 50) { icon = '💪'; title = 'مقبول، تحتاج مزيداً من التدريب!'; }
+  else                { icon = '🧠'; title = 'تحتاج تدريباً أكثر!'; }
+
+  document.getElementById('finalIcon').textContent  = icon;
+  document.getElementById('finalTitle').textContent = title;
+  document.getElementById('finalScore').textContent = pct + '%';
+  document.getElementById('fCorrect').textContent   = correctCount;
+  document.getElementById('fWrong').textContent     = wrongCount;
+
+  document.getElementById('finalScreen').style.display = 'flex';
+}
+
+function restartGame() {
+  clearInterval(displayTimer);
+  clearInterval(recallTimer);
+  document.getElementById('finalScreen').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('statsRow').style.display = 'none';
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('setupArea').style.display = 'block';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('customRnd').value = '';
+  document.getElementById('customRnd').classList.remove('active-custom');
+  selectDur(10);
+  selectRnd(10);
+}
+
+// Init ring
+setRing(10, 10, 'display');
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
+</script>
+</body>
+</html>
