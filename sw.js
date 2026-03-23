@@ -1,8 +1,8 @@
-const CACHE_NAME = 'memory-game-v1';
+const CACHE_NAME = 'phone-memory-v1';
 const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json'
+  '/phone/',
+  '/phone/index.html',
+  '/phone/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
